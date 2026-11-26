@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Students{% endblock %}{% block heading %}Students{% endblock %}
+{% block content %}<div class="panel">
+<div class="row" style="justify-content:space-between;margin-bottom:14px">
+<form class="row" method="get"><div><input name="q" value="{{ q }}" placeholder="Search by ID, name or email"></div><button class="btn o">Search</button></form>
+<a class="btn" href="{{ url_for('student_new') }}">+ Add Student</a></div>
+<table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th class="num">Courses</th><th>Fee</th><th></th></tr></thead><tbody>
+{% for s in rows %}<tr><td><a href="{{ url_for('student_view', sid=s['id']) }}"><b>{{ s['id'] }}</b></a></td><td>{{ s['name'] }}</td><td>{{ s['email'] }}</td><td>{{ s['phone'] }}</td><td class="num">{{ s['ncourses'] }}</td>
+<td>{% if not s['total'] %}<span class="chip a">Not set</span>{% elif s['total']-s['paid'] <= 0 %}<span class="chip g">Paid</span>{% else %}<span class="chip r">Due {{ '%.0f'|format(s['total']-s['paid']) }}</span>{% endif %}</td>
+<td><a class="btn o s" href="{{ url_for('student_edit', sid=s['id']) }}">Edit</a>
+<form class="inl" method="post" action="{{ url_for('student_delete', sid=s['id']) }}" onsubmit="return confirm('Delete this student and all linked records?')"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="btn d s">Delete</button></form></td></tr>
+{% else %}<tr><td colspan="7" class="mut">No students found.</td></tr>{% endfor %}</tbody></table>
+<p class="mut">Total: {{ total }}</p>{% include "_pager.html" %}</div>{% endblock %}

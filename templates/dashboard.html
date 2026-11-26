@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}
+{% block page %}{{ 'admin-dashboard' if user['role']=='admin' else 'student-dashboard' }}{% endblock %}
+{% block heading %}{{ 'Admin Dashboard' if user['role']=='admin' else 'My Dashboard' }}{% endblock %}
+{% block content %}
+<p id="apierr" class="mut"></p>
+<div class="cards" id="cards"><div class="card">Loading...</div></div>
+<div class="panel"><h2>{{ 'Course-wise analytics' if user['role']=='admin' else 'My courses' }}</h2>
+<table><thead>{% if user['role']=='admin' %}<tr><th>Code</th><th>Course</th><th class="num">Enrolled</th><th class="num">Avg marks</th><th class="num">Pass %</th><th class="num">Attendance</th></tr>
+{% else %}<tr><th>Code</th><th>Course</th><th class="num">Avg marks</th><th class="num">Attendance</th></tr>{% endif %}</thead><tbody id="coursebody"></tbody></table></div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}{{ 'Edit' if editing else 'Add' }} Student{% endblock %}{% block heading %}{{ 'Edit Student' if editing else 'Add New Student' }}{% endblock %}
+{% block content %}<form class="panel" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+<div class="grid">
+<div><label>Student ID (max 10, unique, no spaces)</label><input name="id" value="{{ form['id'] }}" maxlength="10" {{ 'readonly' if editing else 'required' }}></div>
+<div><label>Full name (max 20)</label><input name="name" value="{{ form['name'] }}" maxlength="20" required></div>
+<div><label>Email (unique, max 30)</label><input name="email" type="email" value="{{ form['email'] }}" maxlength="30" required></div>
+<div><label>Phone (digits only, unique)</label><input name="phone" value="{{ form['phone'] }}" maxlength="20" required></div>
+<div><label>Department</label><input name="department" value="{{ form['department'] }}" maxlength="20"></div>
+<div><label>Semester (1-8)</label><input name="semester" type="number" min="1" max="8" value="{{ form['semester'] }}"></div></div>
+<h2 style="margin:22px 0 10px;font-size:17px">Courses (select 1 to 4)</h2>
+<div class="checks">{% for c in courses %}<label><input type="checkbox" name="courses" value="{{ c['code'] }}" {{ 'checked' if c['code'] in form['courses'] }}> <b>{{ c['code'] }}</b> {{ c['name'] }}</label>{% endfor %}</div>
+{% if not editing %}<p class="mut">A login is created automatically: username = Student ID, default password student123.</p>{% endif %}
+<div class="row" style="margin-top:18px"><button class="btn">{{ 'Save changes' if editing else 'Save Student' }}</button><a class="btn o" href="{{ url_for('students') }}">Cancel</a></div></form>{% endblock %}

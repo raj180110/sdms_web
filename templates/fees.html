@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Fees{% endblock %}{% block heading %}Fee Management{% endblock %}
+{% block content %}<div class="panel"><table><thead><tr><th>ID</th><th>Name</th><th class="num">Total</th><th class="num">Paid</th><th class="num">Due</th><th>Set total</th><th>Record payment</th></tr></thead><tbody>
+{% set ns = namespace(t=0, p=0) %}
+{% for r in rows %}{% set ns.t = ns.t + r['total'] %}{% set ns.p = ns.p + r['paid'] %}{% set due = r['total']-r['paid'] %}
+<tr><td><b>{{ r['id'] }}</b></td><td>{{ r['name'] }}</td><td class="num">{{ '{:,.2f}'.format(r['total']) }}</td><td class="num">{{ '{:,.2f}'.format(r['paid']) }}</td>
+<td class="num"><b style="color:{{ 'var(--red)' if due>0 else 'var(--grn)' }}">{{ '{:,.2f}'.format(due) }}</b></td>
+<td><form class="row" method="post" action="{{ url_for('fee_total', sid=r['id']) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input style="width:110px" name="total" type="number" step="0.01" min="0" value="{{ r['total'] }}"><button class="btn o s">Set</button></form></td>
+<td>{% if due>0 %}<form class="row" method="post" action="{{ url_for('fee_pay', sid=r['id']) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input style="width:110px" name="amount" type="number" step="0.01" min="0.01" max="{{ due }}" required><button class="btn s">Pay</button></form>{% else %}<span class="chip g">{{ 'Fully paid' if r['total']>0 else 'Set fee first' }}</span>{% endif %}</td></tr>{% endfor %}
+<tr><th colspan="2">TOTAL</th><th class="num">{{ '{:,.2f}'.format(ns.t) }}</th><th class="num">{{ '{:,.2f}'.format(ns.p) }}</th><th class="num">{{ '{:,.2f}'.format(ns.t-ns.p) }}</th><th></th><th></th></tr></tbody></table></div>{% endblock %}

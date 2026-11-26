@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}SDMS{% endblock %} | SDMS</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body data-page="{% block page %}{% endblock %}">
+{% if user %}
+{% set ep = request.endpoint %}
+<div class="shell">
+<aside class="side">
+  <div class="brand"><i>S</i><div>SDMS<small>Student Lifecycle Mgmt</small></div></div>
+  {% if user['role'] == 'admin' %}
+  <a class="nav {{ 'on' if ep=='dashboard' }}" href="{{ url_for('dashboard') }}">Dashboard</a>
+  <a class="nav {{ 'on' if ep in ('students','student_view','student_edit') }}" href="{{ url_for('students') }}">Students</a>
+  <a class="nav {{ 'on' if ep=='student_new' }}" href="{{ url_for('student_new') }}">Add Student</a>
+  <a class="nav {{ 'on' if ep=='courses' }}" href="{{ url_for('courses') }}">Courses</a>
+  <a class="nav {{ 'on' if ep=='fees' }}" href="{{ url_for('fees') }}">Fee Management</a>
+  <a class="nav {{ 'on' if ep=='marks' }}" href="{{ url_for('marks') }}">Marks (Exams)</a>
+  <a class="nav {{ 'on' if ep=='attendance' }}" href="{{ url_for('attendance') }}">Attendance</a>
+  <a class="nav {{ 'on' if ep=='analytics' }}" href="{{ url_for('analytics') }}">Analytics</a>
+  {% else %}
+  <a class="nav {{ 'on' if ep=='dashboard' }}" href="{{ url_for('dashboard') }}">My Dashboard</a>
+  <a class="nav {{ 'on' if ep=='student_view' }}" href="{{ url_for('student_view', sid=user['student_id']) }}">My Profile</a>
+  {% endif %}
+  <a class="nav {{ 'on' if ep=='password' }}" href="{{ url_for('password') }}">Change Password</a>
+  <form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button>Logout</button></form>
+</aside>
+<div class="main">
+  <div class="top"><h1>{% block heading %}{% endblock %}</h1>
+    <div class="who"><b>{{ user['username'] }}</b> &middot; {{ user['role']|capitalize }}</div></div>
+  <div class="page">
+    {% with msgs = get_flashed_messages(with_categories=true) %}{% for c, m in msgs %}<div class="flash {{ c }}">{{ m }}</div>{% endfor %}{% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</div></div>
+{% else %}
+<div class="auth">{% block auth %}{% endblock %}</div>
+{% endif %}
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body></html>

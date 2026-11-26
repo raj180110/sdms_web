@@ -1,0 +1,8 @@
+{# Page links for the students list. In templates/students.html add:  {% include "_pager.html" %}  below the table. #}
+{% if pages > 1 %}
+<div class="pager" style="display:flex;gap:8px;align-items:center;margin-top:12px">
+  {% if page > 1 %}<a href="{{ url_for('students', q=q, page=page-1, per_page=per_page) }}">&laquo; Previous</a>{% endif %}
+  <span>Page {{ page }} of {{ pages }} ({{ total }} students)</span>
+  {% if page < pages %}<a href="{{ url_for('students', q=q, page=page+1, per_page=per_page) }}">Next &raquo;</a>{% endif %}
+</div>
+{% endif %}

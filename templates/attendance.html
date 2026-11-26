@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}Attendance{% endblock %}{% block heading %}Attendance{% endblock %}
+{% block content %}<form class="panel row" method="get">
+<div style="min-width:240px"><label>Course</label><select name="course" required><option value="">Select course</option>{% for c in courses %}<option value="{{ c['code'] }}" {{ 'selected' if c['code']==code }}>{{ c['code'] }} - {{ c['name'] }}</option>{% endfor %}</select></div>
+<div style="width:190px"><label>Date</label><input type="date" name="date" value="{{ day }}" max="{{ today }}"></div><button class="btn o">Load</button></form>
+{% if code and rows %}<form class="panel" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="course" value="{{ code }}"><input type="hidden" name="date" value="{{ day }}">
+<h2>{{ code }} &middot; {{ day }}</h2><table><thead><tr><th>ID</th><th>Name</th><th>Present</th><th>Absent</th></tr></thead><tbody>
+{% for r in rows %}<tr><td><b>{{ r['id'] }}</b></td><td>{{ r['name'] }}</td>
+<td><label style="margin:0"><input style="width:auto" type="radio" name="status_{{ r['id'] }}" value="P" {{ 'checked' if existing.get(r['id'], 'P')=='P' }}> P</label></td>
+<td><label style="margin:0"><input style="width:auto" type="radio" name="status_{{ r['id'] }}" value="A" {{ 'checked' if existing.get(r['id'])=='A' }}> A</label></td></tr>{% endfor %}</tbody></table>
+<button class="btn" style="margin-top:14px">Save attendance</button></form>
+{% elif code %}<div class="panel mut">No student is enrolled in this course (or the course/date is invalid).</div>{% endif %}{% endblock %}

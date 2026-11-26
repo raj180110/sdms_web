@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block title %}Marks{% endblock %}{% block heading %}Examination Marks{% endblock %}
+{% block content %}<form class="panel row" method="get">
+<div style="min-width:240px"><label>Course</label><select name="course" required><option value="">Select course</option>{% for c in courses %}<option value="{{ c['code'] }}" {{ 'selected' if c['code']==code }}>{{ c['code'] }} - {{ c['name'] }}</option>{% endfor %}</select></div>
+<div style="width:170px"><label>Exam</label><select name="exam">{% for e in EXAMS %}<option {{ 'selected' if e==exam }}>{{ e }}</option>{% endfor %}</select></div><button class="btn o">Load</button></form>
+{% if code %}<form class="panel" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="course" value="{{ code }}"><input type="hidden" name="exam" value="{{ exam }}">
+<div class="row" style="justify-content:space-between;margin-bottom:12px"><h2 style="margin:0">{{ code }} &middot; {{ exam }}</h2><div style="width:160px"><label>Maximum score</label><input name="max_score" type="number" step="any" min="1" max="1000" value="{{ mx }}"></div></div>
+<table><thead><tr><th>ID</th><th>Name</th><th style="width:180px">Score</th></tr></thead><tbody>
+{% for r in rows %}<tr><td><b>{{ r['id'] }}</b></td><td>{{ r['name'] }}</td><td><input name="score_{{ r['id'] }}" type="number" step="any" min="0" value="{{ '%g'|format(existing[r['id']]['score']) if r['id'] in existing else '' }}"></td></tr>
+{% else %}<tr><td colspan="3" class="mut">No student is enrolled in this course.</td></tr>{% endfor %}</tbody></table>
+{% if rows %}<p class="mut">Leave a box empty to skip that student. Score cannot be more than the maximum.</p><button class="btn">Save marks</button>{% endif %}</form>{% endif %}{% endblock %}

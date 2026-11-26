@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}Analytics{% endblock %}{% block page %}analytics{% endblock %}{% block heading %}Academic Analytics{% endblock %}
+{% block content %}<p id="apierr" class="mut"></p>
+<div class="grid"><div class="panel"><h2>Average marks (%)</h2><div class="bars" id="b-avg"></div></div>
+<div class="panel"><h2>Pass percentage (pass mark 40%)</h2><div class="bars" id="b-pass"></div></div></div>
+<div class="panel"><h2>Attendance percentage</h2><div class="bars" id="b-att"></div></div>
+<div class="panel"><h2>Course table</h2><table><thead><tr><th>Code</th><th>Course</th><th class="num">Enrolled</th><th class="num">Avg marks</th><th class="num">Pass %</th><th class="num">Attendance</th></tr></thead><tbody id="coursebody"></tbody></table></div>
+{% endblock %}

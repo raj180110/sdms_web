@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}Login{% endblock %}
+{% block auth %}
+<div class="login">
+  <div class="logo">S</div>
+  <h1>Student Lifecycle Management System</h1>
+  <p class="mut" style="text-align:center;margin:0 0 18px">MITS Gwalior &middot; Sign in to continue</p>
+  {% with msgs = get_flashed_messages(with_categories=true) %}{% for c, m in msgs %}<div class="flash {{ c }}">{{ m }}</div>{% endfor %}{% endwith %}
+  <form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>Username</label><input name="username" autocomplete="username" required autofocus>
+    <label style="margin-top:14px">Password</label><input name="password" type="password" autocomplete="current-password" required>
+    <button class="btn" style="width:100%;margin-top:20px;padding:12px">Login</button>
+  </form>
+  <p class="mut" style="text-align:center;font-size:13px;margin-top:16px">3 wrong attempts lock the login for 1 minute</p>
+</div>
+{% endblock %}
